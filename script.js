@@ -3,6 +3,16 @@ const names = ['Chi sono','Articoli','Immagini','Libri','Ufficio'];
 const routes = ['chi-sono','articoli','immagini','libri','ufficio'];
 let progress = 0, queued = false;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('.identity').addEventListener('click',(event)=>{
+  if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+  event.preventDefault();
+  const home=new URL(location.href);
+  home.hash='home';
+  home.searchParams.delete('preview');
+  home.searchParams.delete('studio');
+  history.replaceState(null,'',home.href);
+  location.reload();
+});
 function updateScroll(){
   queued=false;if($('#home-view').hidden)return;
   const story=$('.scroll-story');
@@ -13,9 +23,21 @@ function updateScroll(){
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll)}},{passive:true});
 addEventListener('resize',updateScroll);
 function jumpTo(p){if(location.hash!=='#home')location.hash='home';requestAnimationFrame(()=>{const story=$('.scroll-story');scrollTo({top:story.offsetTop+p*(story.offsetHeight-innerHeight),behavior:'instant'});updateScroll()})}
-document.querySelectorAll('[data-preview]').forEach(button=>button.addEventListener('click',()=>jumpTo(Number(button.dataset.preview))));
-$('#scroll-next').addEventListener('click',()=>{const p=AvatarRotation.gestureProgress.find(n=>n>progress+.015)??1;const story=$('.scroll-story');scrollTo({top:story.offsetTop+p*(story.offsetHeight-innerHeight),behavior:reduceMotion?'instant':'smooth'})});
-$('#mobile-preview').addEventListener('click',()=>{const active=document.body.classList.toggle('mobile-sim');$('#mobile-preview').setAttribute('aria-pressed',String(active));requestAnimationFrame(updateScroll)});
+function focusSection(){document.querySelector('.orbit-item')?.focus({preventScroll:true})}
+$('#scroll-next').addEventListener('click',()=>{
+  if(AvatarRotation.isComplete()){focusSection();return}
+  const p=AvatarRotation.gestureProgress.find(n=>n>progress+.015)??1;
+  const story=$('.scroll-story');
+  scrollTo({top:story.offsetTop+p*(story.offsetHeight-innerHeight),behavior:reduceMotion?'instant':'smooth'});
+});
+$('#explore-now').addEventListener('click',()=>{
+  AvatarRotation.render(1);
+  const story=$('.scroll-story');
+  scrollTo({top:story.offsetTop+story.offsetHeight-innerHeight,behavior:'instant'});
+  updateScroll();
+  // Wait for the labels to finish their short arrival before handing off keyboard focus.
+  setTimeout(focusSection,reduceMotion?0:350);
+});
 $('.menu-toggle').addEventListener('click',()=>{const open=$('#site-nav').classList.toggle('open');$('.menu-toggle').setAttribute('aria-expanded',String(open))});
 const head=(label,title,description)=>`<div class="page-head"><div><p class="eyebrow">GABRIELE LISSONI / ${label.toUpperCase()}</p><h1>${title}</h1><p>${description}</p></div><span class="demo">PROTOTIPO · DATI DIMOSTRATIVI</span></div>`;
 const agents={redattore:{name:'Redattore',icon:'✎',role:'Ricerca, verifica e scrittura di brevi articoli.',status:'Bozza da rivedere',task:'Preparare un articolo sulla curiosità digitale',last:'10 novembre 2026 · 09:00 (esempio)',next:'Non programmato',output:'Le domande che aprono nuove strade · bozza demo'},illustratore:{name:'Illustratore',icon:'✳',role:'Generazione di immagini, titoli e descrizioni.',status:'In attesa di indicazioni',task:'Definire lo stile della prossima galleria',last:'10 novembre 2026 · 10:30 (esempio)',next:'Non programmato',output:'Geometrie di luce · composizione demo'},libraio:{name:'Libraio',icon:'▤',role:'Selezione dei libri e preparazione di recensioni.',status:'Scheda da rivedere',task:'Proporre la prima lettura della settimana',last:'9 novembre 2026 · 09:00 (esempio)',next:'Non programmato',output:'La biblioteca delle possibilità · scheda demo'}};
@@ -32,7 +54,7 @@ AvatarRotation.init();
 addEventListener('hashchange',route);route();
 const previewOptions=new URLSearchParams(location.search);
 if(previewOptions.has('embed'))document.body.classList.add('embedded');
-if(previewOptions.has('mobile')){document.body.classList.add('mobile-sim');$('#mobile-preview').setAttribute('aria-pressed','true')}
+if(previewOptions.has('mobile')){document.body.classList.add('mobile-sim');document.body.classList.add('mobile-sim')}
 
 if(previewOptions.has('preview'))requestAnimationFrame(()=>requestAnimationFrame(()=>jumpTo(Math.max(0,Math.min(1,Number(previewOptions.get('preview'))||0)))));
 

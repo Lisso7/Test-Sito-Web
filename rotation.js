@@ -11,7 +11,18 @@ const AvatarRotation = (() => {
   ];
   const clamp = (n,a=0,b=1) => Math.max(a,Math.min(b,n));
   const smooth = n => {n=clamp(n);return n*n*(3-2*n)};
-  let labelState=[], labelTargets=[], labelAnimation=0, labelTime=0, furthestLabelPosition=0;
+  // End each collection outside the frame crossfade (.4–.6), on a single pose.
+  const collectionStart=.30, collectionDuration=1.35;
+  // Spend more of the short journey around the five pointing poses.
+  const beats=[.7,1.35,.65,1.35,.65,.65,1.35,.65,1.35,.65,.65,1.35,.7];
+  const duration=beats.reduce((sum,n)=>sum+n,0);
+  function poseAt(progress){
+    let time=clamp(progress)*duration;
+    for(let i=0;i<beats.length;i++){if(time<=beats[i])return i+time/beats[i];time-=beats[i]}
+    return 13;
+  }
+  function progressAt(pose){const whole=Math.floor(pose);return (beats.slice(0,whole).reduce((sum,n)=>sum+n,0)+(pose-whole)*(beats[whole]||0))/duration}
+  let labelState=[], labelTargets=[], labelAnimation=0, labelTime=0, checkpointPose=0;
   let images=[], ready=[], failed=[], stack, scene, items, lastProgress=0;
   function init(){
     scene=document.querySelector('.scene');
@@ -28,14 +39,21 @@ const AvatarRotation = (() => {
       image.onerror=()=>{failed[i]=true;render(lastProgress)};
       image.src=`rotation/${String(i+1).padStart(2,'0')}.png`;stack.append(image);
     }
-    document.getElementById('mode-caption').textContent='Caricamento delle 13 viste…';
-    document.getElementById('view-toggle').hidden=true;
+    document.getElementById('mode-caption').textContent='Caricamento…';
     document.body.classList.add('image-rotation');
     render(0);
   }
   function render(progress){
-    if(!stack)return;lastProgress=Math.max(lastProgress,clamp(progress));
-    const position=lastProgress*13; // last interval closes the turn with the original front view
+    if(!stack)return;
+    const requestedPose=poseAt(clamp(progress));
+    // Only fully collected links establish a floor for reverse scrolling.
+    for(const gesture of gestures){
+      const arrival=gesture.frame+collectionStart+collectionDuration;
+      if(requestedPose>=arrival)checkpointPose=Math.max(checkpointPose,arrival);
+    }
+    if(progress>=1)checkpointPose=13;
+    const position=Math.max(requestedPose,checkpointPose);
+    lastProgress=progressAt(position); // close the turn with the original front view
     const low=Math.min(12,Math.floor(position)), high=(low+1)%13;
     const fraction=position-low;
     const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -44,19 +62,17 @@ const AvatarRotation = (() => {
     if(ready[low]&&ready[high]){weights[low]=1-blend;weights[high]+=blend}
     else if(ready[low]||ready[high]) weights[ready[low]?low:high]=1;
     else {const nearest=ready.map((r,i)=>r?i:-1).filter(i=>i>=0).sort((a,b)=>Math.abs(a-low)-Math.abs(b-low))[0];if(nearest!==undefined)weights[nearest]=1}
-    // Keep an opaque lower frame beneath the incoming frame: no white flash at mid-blend.
-    const visible=weights.map((weight,index)=>({weight,index})).filter(x=>x.weight>0);
-    images.forEach(image=>{image.style.opacity='0';image.style.zIndex='0'});
-    if(visible.length===2){images[low].style.opacity='1';images[low].style.zIndex='1';images[high].style.opacity=String(blend);images[high].style.zIndex='2'}
-    else if(visible.length===1){images[visible[0].index].style.opacity='1';images[visible[0].index].style.zIndex='1'}
+    // Transparent cutouts must both fade: an opaque lower frame leaves a second silhouette.
+    images.forEach((image,index)=>{
+      image.style.opacity=String(weights[index]);
+      image.style.zIndex=index===high?'2':'1';
+    });
     const active=blend>=.5?high:low;
     stack.setAttribute('aria-label',`Avatar di Gabriele, vista ${active+1} di 13`);
     const loaded=ready.filter(Boolean).length;
-    document.getElementById('mode-caption').textContent=failed.some(Boolean)?'Una vista non è disponibile · aggiorna la pagina':loaded<13?`Caricamento viste ${loaded}/13`:`Rotazione per immagini · ${String(active+1).padStart(2,'0')} / 13`;
+    document.getElementById('mode-caption').textContent=failed.some(Boolean)?'Impossibile caricare alcune immagini. Aggiorna la pagina.':loaded<13?'Caricamento…':'';
     const rect=stack.getBoundingClientRect(),area=scene.getBoundingClientRect();
     if(!area.width||!area.height)return;
-    // Both avatar and labels advance only; reset is explicit on a new page load.
-    furthestLabelPosition=Math.max(furthestLabelPosition,position);
     const compact=area.width<=700;
     const labelW=compact?106:164,labelH=compact?36:46;
     const columnX=area.width-labelW-(compact?16:area.width*.075);
@@ -64,8 +80,8 @@ const AvatarRotation = (() => {
     const columnY=Math.max(115,(area.height-(row*4+labelH))/2);
     items.forEach((item,i)=>{
       const g=gestures[i];
-      const reveal=smooth((furthestLabelPosition-(g.frame-.28))/.38);
-      const collect=smooth((furthestLabelPosition-(g.frame+.30))/1.25);
+      const reveal=smooth((position-(g.frame-.12))/.32);
+      const collect=smooth((position-(g.frame+collectionStart))/collectionDuration);
       const tipX=rect.left-area.left+(g.tip[0]+510-roots[g.frame])/1024*rect.width;
       const tipY=rect.top-area.top+(g.tip[1]+1463-feet[g.frame])/1536*rect.height;
       const leftHand=g.tip[0]<512;
@@ -80,8 +96,12 @@ const AvatarRotation = (() => {
       labelTargets[i]={x,y,opacity:reveal};
       item.style.left='0';item.style.top='0';item.style.right='auto';item.style.width=labelW+'px';item.style.height=labelH+'px';
       item.classList.toggle('revealed',reveal>.01);item.classList.toggle('collected',collect>.99);
+      const latest=gestures.reduce((last,gesture,index)=>position>=gesture.frame-.12?index:last,-1);
+      item.classList.toggle('latest',i===latest&&lastProgress<1);
       item.tabIndex=reveal>.5?0:-1;item.setAttribute('aria-hidden',String(reveal<=.5));
     });
+    scene.classList.toggle('journey-complete',lastProgress>=1);
+    document.getElementById('explore-now').textContent=lastProgress>=1?'Scegli una sezione':'Esplora subito';
     if(!labelAnimation)labelAnimation=requestAnimationFrame(animateLabels);
   }
   function animateLabels(time){
@@ -107,9 +127,9 @@ const AvatarRotation = (() => {
   function reset(){
     if(labelAnimation)cancelAnimationFrame(labelAnimation);
     labelAnimation=0;labelTime=0;labelState=[];labelTargets=[];
-    lastProgress=0;furthestLabelPosition=0;
+    lastProgress=0;checkpointPose=0;
     render(0);
   }
-  return {init,render,reset,gestureProgress:[1,3,6,8,11].map(n=>(n+.05)/13)};
+  return {init,render,reset,isComplete:()=>lastProgress>=1,gestureProgress:[1,3,6,8,11].map(n=>progressAt(n+.12))};
 })();
 

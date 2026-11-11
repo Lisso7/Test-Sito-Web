@@ -1,5 +1,6 @@
 /* All rules are limited to this page, including the mobile preview. */
-.about-page{max-width:1100px;margin:auto;container-type:inline-size}
+.about-viewport{width:100%;max-width:1100px;margin:auto;position:relative;visibility:hidden}
+.about-page{width:1100px;max-width:none;margin:0;container-type:inline-size;transform-origin:top left;display:flow-root}
 .about-page .about-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:38px}
 .about-page .about-top .eyebrow{margin:0}
 .about-page .about-language{display:flex;border:1px solid var(--line);border-radius:30px;padding:4px;flex-shrink:0}
@@ -47,31 +48,18 @@
 .about-page .about-download-links a:hover{box-shadow:0 5px 15px #18334f20}
 .about-page .about-contact{font-size:11px;color:#39718f;text-decoration:underline;text-underline-offset:4px}
 .about-page .about-presenting{width:150px;height:210px}
-@container(max-width:650px){
-.about-page .about-hero{grid-template-columns:1fr;gap:10px;padding-bottom:35px}
-.about-page .about-hero-art{min-height:190px}
-.about-page .about-hello{height:195px;width:160px}
-.about-page .about-art-label{bottom:-10px}
-.about-page .about-section{padding:36px 0}
-.about-page .about-job{grid-template-columns:1fr;gap:0;padding:24px 0}
-.about-page .about-skill-grid,.about-page .about-education,.about-page .about-training{grid-template-columns:1fr;gap:20px}
-.about-page .about-skill-grid article{padding:22px}
-.about-page .about-thinking{width:72px;height:115px;margin:0;flex-shrink:0}
-.about-page .about-section-title h2{font-size:26px}
-.about-page .about-download{padding:25px;grid-template-columns:1fr;gap:5px}
-.about-page .about-presenting{height:130px;width:100px;justify-self:end}
-.about-page .about-top{gap:10px}
-.about-page .about-top .eyebrow{font-size:8px;letter-spacing:1px}
-.about-page .about-language button{padding:6px 11px}
-}
-/* Career illustrations occupy their own space; the seated figure rests on the copy rule. */
-.about-page .about-job{grid-template-columns:210px minmax(0,1fr);gap:40px;align-items:start;padding:35px 0}
+
+/* Career illustrations stay inside each experience; the Tenova figure closes the description at the right. */
+.about-page .about-job{grid-template-columns:24% minmax(0,1fr);gap:32px;align-items:start;padding:40px 0}
 .about-page .about-job-margin{min-width:0}
-.about-page .about-career-scene{width:175px;height:175px;margin:18px auto 0}
-.about-page .about-job-copy{position:relative;min-width:0}
-.about-page .about-job-1{padding-top:55px;min-height:250px}
-.about-page .about-job-1 .about-job-copy{border-top:1px solid #bedfee;padding-top:25px;padding-right:155px;min-height:210px}
-.about-page .about-seated{position:absolute;width:135px;height:auto;max-width:none;right:4px;top:-119px;z-index:1;mix-blend-mode:multiply;pointer-events:none}
+.about-page .about-career-scene{width:210px;height:210px;max-width:100%;margin:18px auto 0}
+.about-page .about-job-copy{position:relative;min-width:0;display:flow-root}
+.about-page .about-job-1{padding-top:35px;padding-bottom:40px}
+.about-page .about-job-1 .about-job-margin{padding-top:45px}
+.about-page .about-job-1 .about-job-copy{padding-top:45px;min-height:0}
+.about-page .about-job-heading{position:relative}
+.about-page .about-job-1 .about-company{margin-bottom:12px}
+.about-page .about-seated{float:right;position:static;width:245px;height:auto;max-width:42%;margin:-45px 0 8px 20px;transform:translateX(-95px);mix-blend-mode:normal;pointer-events:none}
 .about-page .about-education{gap:28px;align-items:stretch;margin-top:45px}
 .about-page .about-education article{display:flex;flex-direction:column;min-width:0}
 .about-page .about-degree-art{height:150px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:0}
@@ -79,17 +67,7 @@
 .about-page .about-degree-art-0 .about-degree-avatar{width:100%;height:auto;max-height:150px;mix-blend-mode:normal;transform:translateY(2px)}
 .about-page .about-degree-copy{border-top:1px solid #bedfee;padding-top:20px;flex:1}
 .about-page .about-degree-copy>p:last-child{font-size:12px}
-@container(max-width:650px){
-.about-page .about-job{grid-template-columns:1fr;gap:14px;padding:28px 0}
-.about-page .about-job-margin{display:flex;justify-content:space-between;gap:20px;align-items:center}
-.about-page .about-career-scene{width:105px;height:105px;margin:0;flex-shrink:0}
-.about-page .about-job-1{padding-top:30px}
-.about-page .about-job-1 .about-job-margin{min-height:80px;align-items:flex-start}
-.about-page .about-job-1 .about-job-copy{padding-right:0;padding-top:92px;min-height:0}
-.about-page .about-seated{width:108px;right:10px;top:-95px}
-.about-page .about-education{gap:28px;margin-top:15px}
-.about-page .about-degree-art{height:130px;justify-content:flex-start}
-.about-page .about-degree-avatar{width:130px;height:130px}
-.about-page .about-degree-art-0 .about-degree-avatar{width:275px;max-width:100%;max-height:130px}
-}
+
+
+
 

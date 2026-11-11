@@ -4,9 +4,9 @@ Apri `index.html` con un doppio clic. Per confrontare tutti gli stati e le pagin
 
 ## Cosa provare
 
-- Scorri la homepage: le 13 immagini dell’avatar compongono un giro, chiuso dalla vista frontale. La scena rimane ferma e lo scroll controlla direttamente i passaggi; risalendo la sequenza si inverte.
-- Usa Inizio, Intermedio e Finale nella barra inferiore per raggiungere gli stati senza dover scorrere tutto.
-- Premi Mobile per simulare una colonna larga 390 px; verifica anche restringendo la vera finestra del browser.
+- Scorri la homepage: il percorso compatto dedica più spazio alle cinque pose che presentano le sezioni. Le 13 immagini dell’avatar compongono un giro, chiuso dalla vista frontale. La scena rimane ferma e lo scroll controlla direttamente i passaggi; risalendo avatar e voci mantengono il progresso raggiunto. Il refresh o il clic sul logo riavviano la homepage.
+- Usa Esplora subito per saltare alla posa frontale finale con tutti i collegamenti disponibili. A fine giro il comando diventa Scegli una sezione e porta il focus al menu.
+- Per provare il layout mobile restringi la finestra o usa gli strumenti dispositivo del browser. I vecchi controlli del prototipo sono stati rimossi dalla homepage.
 - Le voci appaiono vicino al dito nelle viste 02 (Chi sono), 04 (Articoli), 07 (Immagini), 09 (Libri) e 12 (Ufficio). Quando lasci la posa si spostano in una colonna laterale; al termine sono tutte visibili e cliccabili. Su mobile le etichette vengono contenute nello schermo.
 - I piedi e l’asse delle gambe sono registrati per ogni immagine con offset di visualizzazione; gli originali non sono modificati. Le pose sono mantenute leggibili e collegate da brevi dissolvenze. Il cambiamento delle braccia fa parte delle immagini e non può diventare un movimento 3D continuo con il solo allineamento.
 - Apri le cinque sezioni dal menu o dalle etichette intorno all’avatar. Le pagine hanno indirizzi locali con hash e supportano Indietro/Avanti del browser.
