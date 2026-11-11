@@ -1,0 +1,10 @@
+/* Shared wordmark, independent of the Chi sono page module. */
+header .identity{gap:0;font-size:21px;letter-spacing:-.6px;line-height:1.2}
+.wordmark{display:inline-flex;align-items:baseline;gap:6px;position:relative;padding:7px 0}
+.wordmark>span{font-weight:300;color:#49647a}
+.wordmark>strong{font-weight:600;color:#17364e}
+.wordmark>i{display:block;width:4px;height:4px;border-radius:50%;background:#83c9e9;margin-left:2px;align-self:center;box-shadow:0 0 10px #83c9e933}
+header .identity:after{content:'';width:26px;height:1px;background:linear-gradient(90deg,#a0d7ef,transparent);margin-left:14px;transition:width .2s}
+header .identity:hover:after{width:36px}
+.mobile-sim header .identity{font-size:18px;letter-spacing:-.5px}
+@media(max-width:700px){header .identity{font-size:18px;letter-spacing:-.5px}header .identity:after{width:16px;margin-left:10px}.wordmark{gap:5px}}

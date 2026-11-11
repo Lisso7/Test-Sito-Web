@@ -7,7 +7,6 @@ function updateScroll(){
   queued=false;if($('#home-view').hidden)return;
   const story=$('.scroll-story');
   progress=Math.max(0,Math.min(1,(scrollY-story.offsetTop)/(story.offsetHeight-innerHeight)));
-  $('#progress-fill').style.width=progress*100+'%';
   $('.scene-title').style.opacity=Math.max(0,1-progress*26);
   AvatarRotation.render(progress);
 }
@@ -36,3 +35,19 @@ if(previewOptions.has('embed'))document.body.classList.add('embedded');
 if(previewOptions.has('mobile')){document.body.classList.add('mobile-sim');$('#mobile-preview').setAttribute('aria-pressed','true')}
 
 if(previewOptions.has('preview'))requestAnimationFrame(()=>requestAnimationFrame(()=>jumpTo(Math.max(0,Math.min(1,Number(previewOptions.get('preview'))||0)))));
+
+// Native scroll restoration must not resume a half-completed introduction on refresh.
+addEventListener('pageshow',()=>{
+  if(previewOptions.has('preview'))return;
+  const navigation=performance.getEntriesByType('navigation')[0];
+  if(navigation?.type==='reload' && location.hash && location.hash!=='#home'){
+    history.replaceState(null,'',location.pathname+location.search+'#home');
+    route();
+  }
+  if(!$('#home-view').hidden){
+    AvatarRotation.reset();progress=0;
+    scrollTo({top:0,left:0,behavior:'instant'});
+    updateScroll();
+    requestAnimationFrame(()=>{scrollTo({top:0,left:0,behavior:'instant'});updateScroll()});
+  }
+});

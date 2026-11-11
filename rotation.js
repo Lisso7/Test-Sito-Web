@@ -30,12 +30,11 @@ const AvatarRotation = (() => {
     }
     document.getElementById('mode-caption').textContent='Caricamento delle 13 viste…';
     document.getElementById('view-toggle').hidden=true;
-    document.querySelector('.progress>span:last-child').textContent='360°';
     document.body.classList.add('image-rotation');
     render(0);
   }
   function render(progress){
-    if(!stack)return;lastProgress=clamp(progress);
+    if(!stack)return;lastProgress=Math.max(lastProgress,clamp(progress));
     const position=lastProgress*13; // last interval closes the turn with the original front view
     const low=Math.min(12,Math.floor(position)), high=(low+1)%13;
     const fraction=position-low;
@@ -54,10 +53,9 @@ const AvatarRotation = (() => {
     stack.setAttribute('aria-label',`Avatar di Gabriele, vista ${active+1} di 13`);
     const loaded=ready.filter(Boolean).length;
     document.getElementById('mode-caption').textContent=failed.some(Boolean)?'Una vista non è disponibile · aggiorna la pagina':loaded<13?`Caricamento viste ${loaded}/13`:`Rotazione per immagini · ${String(active+1).padStart(2,'0')} / 13`;
-    document.getElementById('degrees').textContent=String(Math.round(lastProgress*360)).padStart(3,'0')+'°';
     const rect=stack.getBoundingClientRect(),area=scene.getBoundingClientRect();
     if(!area.width||!area.height)return;
-    // Labels keep their furthest reached position while the avatar can rotate backwards.
+    // Both avatar and labels advance only; reset is explicit on a new page load.
     furthestLabelPosition=Math.max(furthestLabelPosition,position);
     const compact=area.width<=700;
     const labelW=compact?106:164,labelH=compact?36:46;
@@ -106,6 +104,12 @@ const AvatarRotation = (() => {
     if(moving)labelAnimation=requestAnimationFrame(animateLabels);
   }
 
-  return {init,render,gestureProgress:[1,3,6,8,11].map(n=>(n+.05)/13)};
+  function reset(){
+    if(labelAnimation)cancelAnimationFrame(labelAnimation);
+    labelAnimation=0;labelTime=0;labelState=[];labelTargets=[];
+    lastProgress=0;furthestLabelPosition=0;
+    render(0);
+  }
+  return {init,render,reset,gestureProgress:[1,3,6,8,11].map(n=>(n+.05)/13)};
 })();
 
