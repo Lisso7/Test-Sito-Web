@@ -6,7 +6,7 @@ function renderOffice(head, agents, agentPanel) {
     <div class="office-experience">
       <div class="studio-main">
         <div class="studio-scene">
-          <img src="office-studio-v2.png" alt="Ufficio tridimensionale con vetrate, scrivanie in legno, monitor e quattro personaggi: Coordinatore, Redattore, Illustratore e Libraio." width="1536" height="1024">
+          <img src="office-studio-v2.png?v=20d7b9142cf66d44" alt="Ufficio tridimensionale con vetrate, scrivanie in legno, monitor e quattro personaggi: Coordinatore, Redattore, Illustratore e Libraio." width="1536" height="1024">
           <div class="studio-hotspots" aria-label="Postazioni dello studio">
             ${order.map((key) => `<button type="button" class="studio-person person-${key}" data-agent="${key}" tabindex="-1" aria-label="Apri scheda ${agents[key].name}" aria-pressed="${key === 'coordinatore'}"></button>`).join('')}
             ${order.map((key, i) => `<button type="button" class="studio-hotspot spot-${key}" data-agent="${key}" aria-label="Seleziona ${agents[key].name}" aria-pressed="${i === 0}"><span class="spot-number">0${i + 1}</span><span class="spot-name">${agents[key].name}</span><span class="spot-arrow" aria-hidden="true">↗</span></button>`).join('')}
@@ -21,7 +21,7 @@ function renderOffice(head, agents, agentPanel) {
       <aside class="agent-panel studio-panel" id="agent-panel" aria-live="polite" aria-atomic="true">${agentPanel('coordinatore')}</aside>
     </div>
     <p class="studio-footnote">Ambiente illustrato con resa 3D e postazioni interattive. Personaggi e attività sono dimostrativi.</p>
-    <dialog class="studio-lightbox" id="studio-lightbox" aria-label="Vista ingrandita dello studio"><button type="button" data-office-close aria-label="Chiudi vista ingrandita">Chiudi ×</button><img src="office-studio-v2.png" alt="Vista ingrandita delle quattro postazioni dello studio"></dialog>`;
+    <dialog class="studio-lightbox" id="studio-lightbox" aria-label="Vista ingrandita dello studio"><button type="button" data-office-close aria-label="Chiudi vista ingrandita">Chiudi ×</button><img src="office-studio-v2.png?v=20d7b9142cf66d44" alt="Vista ingrandita delle quattro postazioni dello studio"></dialog>`;
 }
 document.addEventListener('click', (event) => {
   if (event.target.closest('[data-office-zoom]')) document.getElementById('studio-lightbox')?.showModal();

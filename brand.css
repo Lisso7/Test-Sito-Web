@@ -1,4 +1,9 @@
 /* Shared wordmark, independent of the Chi sono page module. */
+html{scroll-padding-top:108px}
+body>header{position:fixed;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e5edf3;box-shadow:0 3px 18px #18334f04}
+body>header nav.open{max-height:calc(100svh - 92px);overflow-y:auto;overscroll-behavior:contain}
+.studio-panel{top:116px}
+@media(max-width:700px){html{scroll-padding-top:96px}body>header nav.open{max-height:calc(100svh - 80px)}.studio-panel{top:104px}}
 header .identity{gap:0;font-size:21px;letter-spacing:-.6px;line-height:1.2}
 .wordmark{display:inline-flex;align-items:baseline;gap:6px;position:relative;padding:7px 0}
 .wordmark>span{font-weight:300;color:#49647a}

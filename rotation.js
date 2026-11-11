@@ -37,7 +37,7 @@ const AvatarRotation = (() => {
       image.style.opacity='0';images.push(image);ready.push(false);failed.push(false);
       image.onload=async()=>{try{await image.decode()}catch{}ready[i]=true;render(lastProgress)};
       image.onerror=()=>{failed[i]=true;render(lastProgress)};
-      image.src=`rotation/${String(i+1).padStart(2,'0')}.png`;stack.append(image);
+      image.src=`rotation/${String(i+1).padStart(2,'0')}.png?v=20d7b9142cf66d44`;stack.append(image);
     }
     document.getElementById('mode-caption').textContent='Caricamento…';
     document.body.classList.add('image-rotation');
