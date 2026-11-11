@@ -1,0 +1,66 @@
+﻿/* All rules are limited to this page, including the mobile preview. */
+.about-page{max-width:1100px;margin:auto;container-type:inline-size}
+.about-page .about-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:38px}
+.about-page .about-top .eyebrow{margin:0}
+.about-page .about-language{display:flex;border:1px solid var(--line);border-radius:30px;padding:4px;flex-shrink:0}
+.about-page .about-language button{border:0;background:transparent;color:#597386;border-radius:20px;padding:7px 15px;font-size:11px}
+.about-page .about-language button[aria-pressed=true]{background:var(--ink);color:white}
+.about-page .about-hero{display:grid;grid-template-columns:1.7fr 1fr;gap:40px;align-items:center;padding:15px 0 55px}
+.about-page h1{font-size:clamp(38px,5.5cqw,66px);margin-bottom:24px}
+.about-page h2{font-size:clamp(26px,3.2cqw,38px);line-height:1.2}
+.about-page .about-hero h2{font-size:clamp(24px,3cqw,34px);max-width:540px}
+.about-page p{color:#607789;line-height:1.85}
+.about-page .eyebrow{color:#64879e;line-height:1.5;font-size:9px}
+.about-page .about-now{border-left:2px solid #80c5e5;padding:5px 0 5px 20px;margin-top:30px;max-width:490px}
+.about-page .about-now .eyebrow{margin-bottom:7px}
+.about-page .about-now p{margin:0;font-size:12px}
+.about-page .about-hero-art{position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;background:radial-gradient(ellipse,#edf8fe 0%,#fff 69%)}
+.about-page .about-avatar{object-fit:contain;mix-blend-mode:multiply;display:block;max-width:100%}
+.about-page .about-hello{width:245px;height:320px}
+.about-page .about-art-label{position:absolute;bottom:0;font-size:7px;letter-spacing:1.6px;color:#7897aa;text-align:center}
+.about-page .about-section{padding:56px 0;border-top:1px solid var(--line)}
+.about-page .about-subtitle{margin:0 0 30px;font-size:13px}
+.about-page .about-timeline{margin-top:36px}
+.about-page .about-job{display:grid;grid-template-columns:190px 1fr;gap:28px;padding:28px 0;border-top:1px solid var(--line)}
+.about-page .about-date{font-size:10px;letter-spacing:1px;color:#64879e;margin:4px 0 14px}
+.about-page h3{font-size:18px;font-weight:500;line-height:1.45;margin:0 0 9px;letter-spacing:-.3px}
+.about-page .about-company{font-size:12px;color:#387c9f;margin:0 0 12px}
+.about-page .about-job p:last-child{margin-bottom:0;max-width:730px}
+.about-page .about-section-title{display:flex;align-items:center;justify-content:space-between;gap:25px}
+.about-page .about-thinking{width:100px;height:150px;margin:-15px 35px 0 0}
+.about-page .about-skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.about-page .about-skill-grid article{padding:28px;background:#f5fafd;border:1px solid #e4eff5;border-radius:8px}
+.about-page ul{list-style:none;padding:0;margin:16px 0 0}
+.about-page li{padding:10px 0;border-top:1px solid #e0edf4;color:#607789;font-size:12px}
+.about-page .about-education{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin:35px 0}
+.about-page .about-education h3{font-size:16px}
+.about-page .about-education article>p:last-child{font-size:12px}
+.about-page .about-training{border-top:1px solid var(--line);padding-top:25px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px}
+.about-page .about-training h3{font-size:15px}
+.about-page .about-training p{font-size:12px;margin-bottom:0}
+.about-page .about-languages{align-self:center}
+.about-page .about-download{background:#eef7fc;border:1px solid #dcecf6;border-radius:12px;padding:40px;display:grid;grid-template-columns:1fr 150px;gap:30px;align-items:center;margin:10px 0 20px}
+.about-page .about-download p:not(.eyebrow){font-size:13px;max-width:500px}
+.about-page .about-download-links{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}
+.about-page .about-download-links a{display:flex;align-items:center;gap:24px;padding:12px 18px;background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:5px;font-size:12px}
+.about-page .about-download-links a:nth-child(2){background:#fff;color:var(--ink);border-color:#c5ddeb}
+.about-page .about-download-links a:hover{box-shadow:0 5px 15px #18334f20}
+.about-page .about-contact{font-size:11px;color:#39718f;text-decoration:underline;text-underline-offset:4px}
+.about-page .about-presenting{width:150px;height:210px}
+@container(max-width:650px){
+.about-page .about-hero{grid-template-columns:1fr;gap:10px;padding-bottom:35px}
+.about-page .about-hero-art{min-height:190px}
+.about-page .about-hello{height:195px;width:160px}
+.about-page .about-art-label{bottom:-10px}
+.about-page .about-section{padding:36px 0}
+.about-page .about-job{grid-template-columns:1fr;gap:0;padding:24px 0}
+.about-page .about-skill-grid,.about-page .about-education,.about-page .about-training{grid-template-columns:1fr;gap:20px}
+.about-page .about-skill-grid article{padding:22px}
+.about-page .about-thinking{width:72px;height:115px;margin:0;flex-shrink:0}
+.about-page .about-section-title h2{font-size:26px}
+.about-page .about-download{padding:25px;grid-template-columns:1fr;gap:5px}
+.about-page .about-presenting{height:130px;width:100px;justify-self:end}
+.about-page .about-top{gap:10px}
+.about-page .about-top .eyebrow{font-size:8px;letter-spacing:1px}
+.about-page .about-language button{padding:6px 11px}
+}
