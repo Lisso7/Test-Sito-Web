@@ -12,3 +12,7 @@
 /* Visitor-facing journey: short scroll, a point before each label, and a direct route. */
 .image-rotation .scroll-story{height:400svh}.image-rotation .orbit .orbit-item.collected{color:#637f93}.image-rotation .orbit .orbit-item.latest{color:#153b58;font-weight:600}.image-rotation .orbit .orbit-item.latest span{color:#319bc6}.image-rotation .orbit .orbit-item:hover,.image-rotation .orbit .orbit-item:focus-visible{color:#1d82af}.image-rotation .journey-complete .orbit .orbit-item{color:#31546e;font-weight:400}.explore-now{border:0;border-bottom:1px solid #b9d8e9;border-radius:0;background:transparent;padding:8px 0;color:#527f99;font-size:11px;letter-spacing:.2px;transition:color .2s,border-color .2s}.explore-now:hover{color:#196f99;border-color:#65b9dd}.scene-bottom .scroll-hint{min-height:44px}.scene-bottom .explore-now{min-height:44px}.mobile-sim.image-rotation .scroll-story{height:360svh}.mobile-sim .orbit .orbit-item{min-height:44px!important}@media(max-width:700px){.image-rotation .scroll-story{height:360svh}.image-rotation .orbit .orbit-item{min-height:44px!important}.explore-now{font-size:11px}}
 
+
+/* A stopped scroll must always show one sharp pose, never a frozen crossfade. */
+.avatar-stage .rotation-frame{transition:none!important;animation:none!important}
+

@@ -11,7 +11,7 @@ const AvatarRotation = (() => {
   ];
   const clamp = (n,a=0,b=1) => Math.max(a,Math.min(b,n));
   const smooth = n => {n=clamp(n);return n*n*(3-2*n)};
-  // End each collection outside the frame crossfade (.4–.6), on a single pose.
+  // Each collection finishes on the next stable pose.
   const collectionStart=.30, collectionDuration=1.35;
   // Spend more of the short journey around the five pointing poses.
   const beats=[.7,1.35,.65,1.35,.65,.65,1.35,.65,1.35,.65,.65,1.35,.7];
@@ -37,7 +37,7 @@ const AvatarRotation = (() => {
       image.style.opacity='0';images.push(image);ready.push(false);failed.push(false);
       image.onload=async()=>{try{await image.decode()}catch{}ready[i]=true;render(lastProgress)};
       image.onerror=()=>{failed[i]=true;render(lastProgress)};
-      image.src=`rotation/${String(i+1).padStart(2,'0')}.png?v=20d7b9142cf66d44`;stack.append(image);
+      image.src=`rotation/${String(i+1).padStart(2,'0')}.png?v=07ac281ad873cd0d`;stack.append(image);
     }
     document.getElementById('mode-caption').textContent='Caricamento…';
     document.body.classList.add('image-rotation');
@@ -54,21 +54,17 @@ const AvatarRotation = (() => {
     if(progress>=1)checkpointPose=13;
     const position=Math.max(requestedPose,checkpointPose);
     lastProgress=progressAt(position); // close the turn with the original front view
-    const low=Math.min(12,Math.floor(position)), high=(low+1)%13;
-    const fraction=position-low;
-    const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const blend=lastProgress===1?1:reduced?(fraction>=.5?1:0):smooth((fraction-.4)/.2);
-    let weights=images.map(()=>0);
-    if(ready[low]&&ready[high]){weights[low]=1-blend;weights[high]+=blend}
-    else if(ready[low]||ready[high]) weights[ready[low]?low:high]=1;
-    else {const nearest=ready.map((r,i)=>r?i:-1).filter(i=>i>=0).sort((a,b)=>Math.abs(a-low)-Math.abs(b-low))[0];if(nearest!==undefined)weights[nearest]=1}
-    // Transparent cutouts must both fade: an opaque lower frame leaves a second silhouette.
+    // Never stop between transparent cutouts: exactly one decoded pose is visible.
+    const requestedFrame=Math.round(position)%13;
+    const distance=index=>Math.min(Math.abs(index-requestedFrame),13-Math.abs(index-requestedFrame));
+    const active=ready[requestedFrame]?requestedFrame:ready
+      .map((loaded,index)=>loaded?index:-1).filter(index=>index>=0)
+      .sort((a,b)=>distance(a)-distance(b))[0];
     images.forEach((image,index)=>{
-      image.style.opacity=String(weights[index]);
-      image.style.zIndex=index===high?'2':'1';
+      image.style.opacity=index===active?'1':'0';
+      image.style.zIndex=index===active?'2':'0';
     });
-    const active=blend>=.5?high:low;
-    stack.setAttribute('aria-label',`Avatar di Gabriele, vista ${active+1} di 13`);
+    stack.setAttribute('aria-label',active===undefined?'Caricamento avatar di Gabriele':`Avatar di Gabriele, vista ${active+1} di 13`);
     const loaded=ready.filter(Boolean).length;
     document.getElementById('mode-caption').textContent=failed.some(Boolean)?'Impossibile caricare alcune immagini. Aggiorna la pagina.':loaded<13?'Caricamento…':'';
     const rect=stack.getBoundingClientRect(),area=scene.getBoundingClientRect();
